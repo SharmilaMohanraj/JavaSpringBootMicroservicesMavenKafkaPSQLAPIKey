@@ -1,0 +1,40 @@
+server:
+  port: 29875
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+springdoc:
+  swagger-ui:
+    path: /docs
+    urls:
+        - name: inventory-service
+          url: /inventory-service/api-docs
+        - name: cart-service
+          url: /cart-service/api-docs
+        - name: catalog-service
+          url: /catalog-service/api-docs
+        - name: order-service
+          url: /order-service/api-docs
+        - name: user-service
+          url: /user-service/api-docs
