@@ -16,6 +16,7 @@
         <module>inventory-service</module>
         <module>cart-service</module>
         <module>order-service</module>
+        <module>notification-service</module>
         <module>user-service</module>
     </modules>
 
@@ -28,6 +29,7 @@
         <spring-boot.version>3.2.10</spring-boot.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <hibernate.version>6.6.2.Final</hibernate.version>
+        <kafka.version>3.8.0</kafka.version>
     </properties>
 
     <dependencyManagement>

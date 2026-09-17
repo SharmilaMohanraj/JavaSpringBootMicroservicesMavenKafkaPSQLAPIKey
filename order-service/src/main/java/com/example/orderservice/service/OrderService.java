@@ -1,6 +1,8 @@
 package com.example.orderservice.service;
 
 import com.example.orderservice.domain.Order;
+import com.example.orderservice.domain.OrderStatus;
+import com.example.orderservice.event.OrderStatusEventPublisher;
 import com.example.orderservice.repository.OrderRepository;
 import com.example.orderservice.web.dto.*;
 import com.example.orderservice.web.error.ResourceNotFoundException;
@@ -13,9 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class OrderService {
   private final OrderRepository repository;
+  private final OrderStatusEventPublisher orderStatusEventPublisher;
 
-  public OrderService(OrderRepository repository) {
+  public OrderService(
+      OrderRepository repository, OrderStatusEventPublisher orderStatusEventPublisher) {
     this.repository = repository;
+    this.orderStatusEventPublisher = orderStatusEventPublisher;
   }
 
   public Page<OrderResponse> findAll(Pageable pageable) {
@@ -36,13 +41,24 @@ public class OrderService {
   @Transactional
   public OrderResponse update(UUID id, OrderRequest request) {
     Order entity = get(id);
+    OrderStatus previousStatus = entity.getStatus();
     apply(entity, request);
-    return toResponse(repository.save(entity));
+    Order savedOrder = repository.save(entity);
+    if (isNotifiableStatusTransition(previousStatus, savedOrder.getStatus())) {
+      orderStatusEventPublisher.publish(savedOrder, previousStatus);
+    }
+    return toResponse(savedOrder);
   }
 
   @Transactional
   public void delete(UUID id) {
     repository.delete(get(id));
+  }
+
+  private boolean isNotifiableStatusTransition(OrderStatus previousStatus, OrderStatus newStatus) {
+    return (previousStatus == OrderStatus.PENDING && newStatus == OrderStatus.CONFIRMED)
+        || (previousStatus == OrderStatus.CONFIRMED && newStatus == OrderStatus.SHIPPED)
+        || (previousStatus == OrderStatus.SHIPPED && newStatus == OrderStatus.DELIVERED);
   }
 
   private Order get(UUID id) {

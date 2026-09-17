@@ -1,6 +1,7 @@
 package com.example.inventoryservice.service;
 
 import com.example.inventoryservice.domain.InventoryItem;
+import com.example.inventoryservice.event.LowStockAlertEventPublisher;
 import com.example.inventoryservice.repository.InventoryItemRepository;
 import com.example.inventoryservice.web.dto.*;
 import com.example.inventoryservice.web.error.ResourceNotFoundException;
@@ -13,9 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class InventoryItemService {
   private final InventoryItemRepository repository;
+  private final LowStockAlertEventPublisher lowStockAlertEventPublisher;
+  private final int lowStockThreshold;
 
-  public InventoryItemService(InventoryItemRepository repository) {
+  public InventoryItemService(
+      InventoryItemRepository repository,
+      LowStockAlertEventPublisher lowStockAlertEventPublisher,
+      @org.springframework.beans.factory.annotation.Value("${app.inventory.low-stock-threshold}")
+          int lowStockThreshold) {
     this.repository = repository;
+    this.lowStockAlertEventPublisher = lowStockAlertEventPublisher;
+    this.lowStockThreshold = lowStockThreshold;
   }
 
   public Page<InventoryItemResponse> findAll(Pageable pageable) {
@@ -36,8 +45,13 @@ public class InventoryItemService {
   @Transactional
   public InventoryItemResponse update(UUID id, InventoryItemRequest request) {
     InventoryItem entity = get(id);
+    int previousQuantity = entity.getQuantity();
     apply(entity, request);
-    return toResponse(repository.save(entity));
+    InventoryItem savedItem = repository.save(entity);
+    if (previousQuantity >= lowStockThreshold && savedItem.getQuantity() < lowStockThreshold) {
+      lowStockAlertEventPublisher.publish(savedItem);
+    }
+    return toResponse(savedItem);
   }
 
   @Transactional

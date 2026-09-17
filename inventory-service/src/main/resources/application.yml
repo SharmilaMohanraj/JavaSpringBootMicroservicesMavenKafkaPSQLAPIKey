@@ -5,6 +5,18 @@ server:
 spring:
   application:
     name: inventory-service
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+app:
+  inventory:
+    low-stock-threshold: ${LOW_STOCK_THRESHOLD:10}
+  kafka:
+    topics:
+      low-stock: low-stock-alert-events
 
 eureka:
   client:

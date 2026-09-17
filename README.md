@@ -26,6 +26,7 @@ cd inventory-service && mvn spring-boot:run   # port 22482
 cd cart-service && mvn spring-boot:run   # port 21954
 cd catalog-service && mvn spring-boot:run   # port 29838
 cd order-service && mvn spring-boot:run   # port 22354
+cd notification-service && mvn spring-boot:run   # port 26550
 cd user-service && mvn spring-boot:run   # port 26642
 cd gateway-service && mvn spring-boot:run   # port 29875
 ```
@@ -41,6 +42,7 @@ service name:
 - **cart-service**: `http://localhost:29875/cart-service/api/v1/...`
 - **catalog-service**: `http://localhost:29875/catalog-service/api/v1/...`
 - **order-service**: `http://localhost:29875/order-service/api/v1/...`
+- **notification-service**: `http://localhost:29875/notification-service/api/v1/...`
 - **user-service**: `http://localhost:29875/user-service/api/v1/...`
 
 - **Aggregated Swagger docs**: `http://localhost:29875/docs`

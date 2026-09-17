@@ -1,20 +1,23 @@
 server:
-  port: 22354
+  port: 26550
   forward-headers-strategy: framework
 
 spring:
   application:
-    name: order-service
+    name: notification-service
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: notification-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 app:
   kafka:
     topics:
       order-status: order-status-events
+      low-stock: low-stock-alert-events
 
 eureka:
   client:

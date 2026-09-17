@@ -6,5 +6,6 @@ start /B java -jar catalog-service\target\catalog-service.jar --server.port=2983
 start /B java -jar inventory-service\target\inventory-service.jar --server.port=22482
 start /B java -jar cart-service\target\cart-service.jar --server.port=21954
 start /B java -jar order-service\target\order-service.jar --server.port=22354
+start /B java -jar notification-service\target\notification-service.jar --server.port=26550
 start /B java -jar user-service\target\user-service.jar --server.port=26642
 java -jar gateway-service\target\gateway-service.jar --server.port=29875
