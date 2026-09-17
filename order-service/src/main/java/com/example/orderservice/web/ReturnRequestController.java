@@ -35,7 +35,8 @@ public class ReturnRequestController {
 
   @PostMapping("/return-requests")
   @Operation(summary = "Raise a return request for a delivered order")
-  public ResponseEntity<ReturnRequestResponse> raise(@Valid @RequestBody RaiseReturnRequest request) {
+  public ResponseEntity<ReturnRequestResponse> raise(
+      @Valid @RequestBody RaiseReturnRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED).body(service.raise(request));
   }
 

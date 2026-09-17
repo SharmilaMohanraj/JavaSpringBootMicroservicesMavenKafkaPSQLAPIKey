@@ -43,23 +43,79 @@ public class ReturnRequest {
   @Column(nullable = false, updatable = false)
   private Instant createdAt;
 
-  public UUID getId() { return id; }
-  public UUID getCustomerId() { return customerId; }
-  public void setCustomerId(UUID customerId) { this.customerId = customerId; }
-  public UUID getOrderId() { return orderId; }
-  public void setOrderId(UUID orderId) { this.orderId = orderId; }
-  public UUID getInventoryItemId() { return inventoryItemId; }
-  public void setInventoryItemId(UUID inventoryItemId) { this.inventoryItemId = inventoryItemId; }
-  public int getQuantity() { return quantity; }
-  public void setQuantity(int quantity) { this.quantity = quantity; }
-  public String getReason() { return reason; }
-  public void setReason(String reason) { this.reason = reason; }
-  public UUID getWarehouseStaffId() { return warehouseStaffId; }
-  public void setWarehouseStaffId(UUID warehouseStaffId) { this.warehouseStaffId = warehouseStaffId; }
-  public String getInspectionNotes() { return inspectionNotes; }
-  public void setInspectionNotes(String inspectionNotes) { this.inspectionNotes = inspectionNotes; }
-  public ReturnStatus getStatus() { return status; }
-  public void setStatus(ReturnStatus status) { this.status = status; }
-  public Instant getCreatedAt() { return createdAt; }
-  public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+  public UUID getId() {
+    return id;
+  }
+
+  public UUID getCustomerId() {
+    return customerId;
+  }
+
+  public void setCustomerId(UUID customerId) {
+    this.customerId = customerId;
+  }
+
+  public UUID getOrderId() {
+    return orderId;
+  }
+
+  public void setOrderId(UUID orderId) {
+    this.orderId = orderId;
+  }
+
+  public UUID getInventoryItemId() {
+    return inventoryItemId;
+  }
+
+  public void setInventoryItemId(UUID inventoryItemId) {
+    this.inventoryItemId = inventoryItemId;
+  }
+
+  public int getQuantity() {
+    return quantity;
+  }
+
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
+
+  public String getReason() {
+    return reason;
+  }
+
+  public void setReason(String reason) {
+    this.reason = reason;
+  }
+
+  public UUID getWarehouseStaffId() {
+    return warehouseStaffId;
+  }
+
+  public void setWarehouseStaffId(UUID warehouseStaffId) {
+    this.warehouseStaffId = warehouseStaffId;
+  }
+
+  public String getInspectionNotes() {
+    return inspectionNotes;
+  }
+
+  public void setInspectionNotes(String inspectionNotes) {
+    this.inspectionNotes = inspectionNotes;
+  }
+
+  public ReturnStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(ReturnStatus status) {
+    this.status = status;
+  }
+
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Instant createdAt) {
+    this.createdAt = createdAt;
+  }
 }

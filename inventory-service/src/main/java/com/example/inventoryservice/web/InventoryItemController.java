@@ -61,6 +61,5 @@ public class InventoryItemController {
     return ResponseEntity.ok(service.restore(id, request.quantity()));
   }
 
-  public record RestoreQuantityRequest(@jakarta.validation.constraints.Min(1) int quantity) {
-  }
+  public record RestoreQuantityRequest(@jakarta.validation.constraints.Min(1) int quantity) {}
 }

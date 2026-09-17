@@ -51,10 +51,14 @@ public class ReturnRequestService {
 
   @Transactional
   public ReturnRequestResponse raise(RaiseReturnRequest request) {
-    Order order = orders.findById(request.orderId())
-        .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + request.orderId()));
+    Order order =
+        orders
+            .findById(request.orderId())
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Order not found: " + request.orderId()));
     if (order.getStatus() != OrderStatus.DELIVERED) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Returns may only be raised for delivered orders");
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "Returns may only be raised for delivered orders");
     }
     ReturnRequest entity = new ReturnRequest();
     entity.setCustomerId(request.customerId());
@@ -70,7 +74,8 @@ public class ReturnRequestService {
   public OffsetPage<ReturnRequestResponse> findByCustomer(UUID customerId, long offset, int limit) {
     Pageable pageable = PageRequest.of(Math.toIntExact(offset / limit), limit);
     var page = returnRequests.findByCustomerId(customerId, pageable);
-    return new OffsetPage<>(page.map(this::toResponse).getContent(), page.getTotalElements(), limit, offset);
+    return new OffsetPage<>(
+        page.map(this::toResponse).getContent(), page.getTotalElements(), limit, offset);
   }
 
   public ReturnRequestResponse inspect(UUID id, InspectReturnRequest request) {
@@ -111,10 +116,13 @@ public class ReturnRequestService {
 
   @Transactional
   public RefundPaymentResponse completeRefund(UUID id) {
-    RefundPayment payment = refundPayments.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Refund payment not found: " + id));
+    RefundPayment payment =
+        refundPayments
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Refund payment not found: " + id));
     if (payment.getStatus() != ReturnStatus.REFUND_INITIATED) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Refund is not awaiting completion");
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "Refund is not awaiting completion");
     }
     payment.setStatus(ReturnStatus.REFUND_COMPLETED);
     RefundPayment saved = refundPayments.save(payment);
@@ -126,47 +134,69 @@ public class ReturnRequestService {
 
   public List<MonthlyRefundTotal> monthlyRefundTotals() {
     return refundPayments.findAll().stream()
-        .collect(java.util.stream.Collectors.groupingBy(
-            payment -> YearMonth.from(payment.getCreatedAt().atZone(ZoneOffset.UTC)),
-            java.util.TreeMap::new,
-            java.util.stream.Collectors.reducing(BigDecimal.ZERO, RefundPayment::getAmount, BigDecimal::add)))
-        .entrySet().stream()
+        .collect(
+            java.util.stream.Collectors.groupingBy(
+                payment -> YearMonth.from(payment.getCreatedAt().atZone(ZoneOffset.UTC)),
+                java.util.TreeMap::new,
+                java.util.stream.Collectors.reducing(
+                    BigDecimal.ZERO, RefundPayment::getAmount, BigDecimal::add)))
+        .entrySet()
+        .stream()
         .map(entry -> new MonthlyRefundTotal(entry.getKey(), entry.getValue()))
         .toList();
   }
 
   private void restoreInventory(ReturnRequest request) {
-    restClient.post().uri("/api/v1/inventory-items/{id}/restore", request.getInventoryItemId())
-        .body(new RestoreInventoryRequest(request.getQuantity())).retrieve().toBodilessEntity();
+    restClient
+        .post()
+        .uri("/api/v1/inventory-items/{id}/restore", request.getInventoryItemId())
+        .body(new RestoreInventoryRequest(request.getQuantity()))
+        .retrieve()
+        .toBodilessEntity();
   }
 
   private Order orderFor(ReturnRequest request) {
-    return orders.findById(request.getOrderId())
-        .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + request.getOrderId()));
+    return orders
+        .findById(request.getOrderId())
+        .orElseThrow(
+            () -> new ResourceNotFoundException("Order not found: " + request.getOrderId()));
   }
 
   private ReturnRequest getRequest(UUID id) {
-    return returnRequests.findById(id)
+    return returnRequests
+        .findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Return request not found: " + id));
   }
 
   private void requireRequested(ReturnRequest request) {
     if (request.getStatus() != ReturnStatus.RETURN_REQUESTED) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Return request has already been decided");
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "Return request has already been decided");
     }
   }
 
   private ReturnRequestResponse toResponse(ReturnRequest request) {
-    return new ReturnRequestResponse(request.getId(), request.getCustomerId(), request.getOrderId(),
-        request.getInventoryItemId(), request.getQuantity(), request.getReason(), request.getWarehouseStaffId(),
-        request.getInspectionNotes(), request.getStatus(), request.getCreatedAt());
+    return new ReturnRequestResponse(
+        request.getId(),
+        request.getCustomerId(),
+        request.getOrderId(),
+        request.getInventoryItemId(),
+        request.getQuantity(),
+        request.getReason(),
+        request.getWarehouseStaffId(),
+        request.getInspectionNotes(),
+        request.getStatus(),
+        request.getCreatedAt());
   }
 
   private RefundPaymentResponse toResponse(RefundPayment payment) {
-    return new RefundPaymentResponse(payment.getId(), payment.getReturnRequestId(), payment.getAmount(),
-        payment.getStatus(), payment.getCreatedAt());
+    return new RefundPaymentResponse(
+        payment.getId(),
+        payment.getReturnRequestId(),
+        payment.getAmount(),
+        payment.getStatus(),
+        payment.getCreatedAt());
   }
 
-  private record RestoreInventoryRequest(int quantity) {
-  }
+  private record RestoreInventoryRequest(int quantity) {}
 }

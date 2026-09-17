@@ -11,7 +11,8 @@ public class NotificationEventListener {
   private final ObjectMapper objectMapper;
   private final NotificationService notificationService;
 
-  public NotificationEventListener(ObjectMapper objectMapper, NotificationService notificationService) {
+  public NotificationEventListener(
+      ObjectMapper objectMapper, NotificationService notificationService) {
     this.objectMapper = objectMapper;
     this.notificationService = notificationService;
   }
@@ -22,7 +23,13 @@ public class NotificationEventListener {
     notificationService.create(
         event.userId(),
         event.eventType(),
-        "Order " + event.orderId() + " status changed from " + event.previousStatus() + " to " + event.status() + ".");
+        "Order "
+            + event.orderId()
+            + " status changed from "
+            + event.previousStatus()
+            + " to "
+            + event.status()
+            + ".");
   }
 
   @KafkaListener(topics = "${app.kafka.topics.low-stock}")
@@ -31,8 +38,13 @@ public class NotificationEventListener {
     notificationService.create(
         null,
         event.eventType(),
-        "Low stock alert for product " + event.productId() + ": " + event.quantity()
-            + " remaining (threshold: " + event.lowStockThreshold() + ").");
+        "Low stock alert for product "
+            + event.productId()
+            + ": "
+            + event.quantity()
+            + " remaining (threshold: "
+            + event.lowStockThreshold()
+            + ").");
   }
 
   private <T> T read(String payload, Class<T> eventType) {

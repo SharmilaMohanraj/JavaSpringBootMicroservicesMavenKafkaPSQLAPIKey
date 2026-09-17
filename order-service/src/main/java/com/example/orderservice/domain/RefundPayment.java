@@ -32,13 +32,39 @@ public class RefundPayment {
   @Column(nullable = false, updatable = false)
   private Instant createdAt;
 
-  public UUID getId() { return id; }
-  public UUID getReturnRequestId() { return returnRequestId; }
-  public void setReturnRequestId(UUID returnRequestId) { this.returnRequestId = returnRequestId; }
-  public BigDecimal getAmount() { return amount; }
-  public void setAmount(BigDecimal amount) { this.amount = amount; }
-  public ReturnStatus getStatus() { return status; }
-  public void setStatus(ReturnStatus status) { this.status = status; }
-  public Instant getCreatedAt() { return createdAt; }
-  public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+  public UUID getId() {
+    return id;
+  }
+
+  public UUID getReturnRequestId() {
+    return returnRequestId;
+  }
+
+  public void setReturnRequestId(UUID returnRequestId) {
+    this.returnRequestId = returnRequestId;
+  }
+
+  public BigDecimal getAmount() {
+    return amount;
+  }
+
+  public void setAmount(BigDecimal amount) {
+    this.amount = amount;
+  }
+
+  public ReturnStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(ReturnStatus status) {
+    this.status = status;
+  }
+
+  public Instant getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Instant createdAt) {
+    this.createdAt = createdAt;
+  }
 }

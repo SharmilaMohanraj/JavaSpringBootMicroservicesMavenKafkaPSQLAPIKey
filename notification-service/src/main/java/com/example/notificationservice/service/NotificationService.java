@@ -40,15 +40,24 @@ public class NotificationService {
 
   @Transactional
   public NotificationResponse markRead(UUID id) {
-    Notification notification = repository.findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification not found: " + id));
+    Notification notification =
+        repository
+            .findById(id)
+            .orElseThrow(
+                () ->
+                    new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Notification not found: " + id));
     notification.setReadStatus(NotificationStatus.READ);
     return toResponse(repository.save(notification));
   }
 
   private NotificationResponse toResponse(Notification notification) {
     return new NotificationResponse(
-        notification.getId(), notification.getUserId(), notification.getEventType(), notification.getMessage(),
-        notification.getReadStatus(), notification.getCreatedAt());
+        notification.getId(),
+        notification.getUserId(),
+        notification.getEventType(),
+        notification.getMessage(),
+        notification.getReadStatus(),
+        notification.getCreatedAt());
   }
 }

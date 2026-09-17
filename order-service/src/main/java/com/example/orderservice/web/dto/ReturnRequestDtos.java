@@ -11,22 +11,18 @@ import java.util.List;
 import java.util.UUID;
 
 public final class ReturnRequestDtos {
-  private ReturnRequestDtos() {
-  }
+  private ReturnRequestDtos() {}
 
   public record RaiseReturnRequest(
       @NotNull UUID customerId,
       @NotNull UUID orderId,
       @NotNull UUID inventoryItemId,
       @Min(1) int quantity,
-      @NotBlank String reason) {
-  }
+      @NotBlank String reason) {}
 
-  public record InspectReturnRequest(@NotNull UUID warehouseStaffId, @NotBlank String notes) {
-  }
+  public record InspectReturnRequest(@NotNull UUID warehouseStaffId, @NotBlank String notes) {}
 
-  public record ReturnDecision(@NotNull UUID warehouseStaffId, @NotBlank String notes) {
-  }
+  public record ReturnDecision(@NotNull UUID warehouseStaffId, @NotBlank String notes) {}
 
   public record ReturnRequestResponse(
       UUID id,
@@ -38,16 +34,12 @@ public final class ReturnRequestDtos {
       UUID warehouseStaffId,
       String inspectionNotes,
       ReturnStatus status,
-      Instant createdAt) {
-  }
+      Instant createdAt) {}
 
   public record RefundPaymentResponse(
-      UUID id, UUID returnRequestId, BigDecimal amount, ReturnStatus status, Instant createdAt) {
-  }
+      UUID id, UUID returnRequestId, BigDecimal amount, ReturnStatus status, Instant createdAt) {}
 
-  public record MonthlyRefundTotal(YearMonth month, BigDecimal totalRefundAmount) {
-  }
+  public record MonthlyRefundTotal(YearMonth month, BigDecimal totalRefundAmount) {}
 
-  public record OffsetPage<T>(List<T> content, long total, int limit, long offset) {
-  }
+  public record OffsetPage<T>(List<T> content, long total, int limit, long offset) {}
 }
