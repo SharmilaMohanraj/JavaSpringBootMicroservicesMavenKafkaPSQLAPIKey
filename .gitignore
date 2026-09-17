@@ -32,3 +32,16 @@ send_report_email.py
 server.log
 start.log
 test_results.md
+cart-service/src/main/resources/application.properties
+catalog-service/src/main/resources/application.properties
+inventory-service/src/main/resources/application.properties
+notification-service/src/main/resources/application.properties
+order-service/src/main/resources/application.properties
+user-service/src/main/resources/application.properties
+cart-service/src/main/resources/application.yml
+catalog-service/src/main/resources/application.yml
+gateway-service/src/main/resources/application.yml
+inventory-service/src/main/resources/application.yml
+notification-service/src/main/resources/application.yml
+order-service/src/main/resources/application.yml
+user-service/src/main/resources/application.yml
