@@ -12,6 +12,8 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 app:
+  inventory:
+    base-url: ${INVENTORY_SERVICE_BASE_URL:http://localhost:22482}
   kafka:
     topics:
       order-status: order-status-events

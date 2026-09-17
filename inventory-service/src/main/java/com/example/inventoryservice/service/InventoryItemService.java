@@ -17,6 +17,11 @@ public class InventoryItemService {
   private final LowStockAlertEventPublisher lowStockAlertEventPublisher;
   private final int lowStockThreshold;
 
+  public InventoryItemService(InventoryItemRepository repository) {
+    this(repository, null, 0);
+  }
+
+  @org.springframework.beans.factory.annotation.Autowired
   public InventoryItemService(
       InventoryItemRepository repository,
       LowStockAlertEventPublisher lowStockAlertEventPublisher,
@@ -57,6 +62,13 @@ public class InventoryItemService {
   @Transactional
   public void delete(UUID id) {
     repository.delete(get(id));
+  }
+
+  @Transactional
+  public InventoryItemResponse restore(UUID id, int quantity) {
+    InventoryItem entity = get(id);
+    entity.setQuantity(entity.getQuantity() + quantity);
+    return toResponse(repository.save(entity));
   }
 
   private InventoryItem get(UUID id) {

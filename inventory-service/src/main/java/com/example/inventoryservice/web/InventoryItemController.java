@@ -53,4 +53,14 @@ public class InventoryItemController {
   public void delete(@PathVariable UUID id) {
     service.delete(id);
   }
+
+  @PostMapping("/{id}/restore")
+  @Operation(summary = "Restore inventory after an approved return")
+  public ResponseEntity<InventoryItemResponse> restore(
+      @PathVariable UUID id, @Valid @RequestBody RestoreQuantityRequest request) {
+    return ResponseEntity.ok(service.restore(id, request.quantity()));
+  }
+
+  public record RestoreQuantityRequest(@jakarta.validation.constraints.Min(1) int quantity) {
+  }
 }
